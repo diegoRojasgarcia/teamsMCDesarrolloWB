@@ -1,6 +1,14 @@
 import { ObjectType, Field, Int, Directive } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 import { Users } from './user.entity';
+import { Integrante } from 'src/integrante/entities/integrante.entity';
 
 @Entity()
 @ObjectType()
@@ -20,4 +28,10 @@ export class Equipo {
 
   @Field(() => Users)
   user?: Users;
+
+  @OneToMany(() => Integrante, (integrante) => integrante.equipo, {
+    eager: true,
+  })
+  @Field(() => [Integrante])
+  integrantes?: Integrante[];
 }

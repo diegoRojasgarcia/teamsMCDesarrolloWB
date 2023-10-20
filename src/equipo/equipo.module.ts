@@ -19,5 +19,6 @@ import { UsersResolver } from './resolvers/users.resolver';
     TypeOrmModule.forFeature([Equipo]),
   ],
   providers: [EquipoResolver, EquipoService, UsersResolver],
+  exports: [EquipoService],
 })
 export class EquipoModule {}

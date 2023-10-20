@@ -1,20 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateIntegranteInput } from '../dto/create-integrante.input';
 import { UpdateIntegranteInput } from '../dto/update-integrante.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Integrante } from '../entities/integrante.entity';
 import { Repository } from 'typeorm';
+import { EquipoService } from 'src/equipo/services/equipo.service';
 
 @Injectable()
 export class IntegranteService {
   constructor(
     @InjectRepository(Integrante)
     private integranteRepository: Repository<Integrante>,
+    private readonly equipoService: EquipoService,
   ) {}
 
-  create(createIntegranteInput: CreateIntegranteInput) {
-    const newUser = this.integranteRepository.create(createIntegranteInput);
-    return this.integranteRepository.save(newUser);
+  async create(createIntegranteInput: CreateIntegranteInput) {
+    const { equipoId, userId, rol } = createIntegranteInput;
+    const equipoDB = await this.equipoService.findOneById(equipoId);
+    if (!equipoDB) throw new NotFoundException('Equipo not found');
+    const newIntegrante = this.integranteRepository.create();
+    newIntegrante.userId = userId;
+    newIntegrante.rol = rol;
+    newIntegrante.equipoId = equipoDB.id;
+    this.integranteRepository.save(newIntegrante);
+    return equipoDB;
   }
 
   // findAll() {
@@ -32,4 +41,10 @@ export class IntegranteService {
   // remove(id: number) {
   //   return `This action removes a #${id} integrante`;
   // }
+
+  async forUserId(userId: number) {
+    const integrante = await this.integranteRepository.find();
+    if (!integrante) return [];
+    return integrante.filter((integrante) => integrante.userId === userId);
+  }
 }

@@ -17,6 +17,10 @@ export class EquipoService {
     return this.equipoRepository.save(newUser);
   }
 
+  async saveEquipo(equipo: Equipo): Promise<Equipo> {
+    return this.equipoRepository.save(equipo);
+  }
+
   async findAll(): Promise<Equipo[]> {
     return this.equipoRepository.find();
   }

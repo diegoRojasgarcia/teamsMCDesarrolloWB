@@ -8,6 +8,7 @@ import {
 } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Integrante } from './entities/integrante.entity';
+import { EquipoModule } from 'src/equipo/equipo.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Integrante } from './entities/integrante.entity';
       autoSchemaFile: { federation: 2 },
     }),
     TypeOrmModule.forFeature([Integrante]),
+    EquipoModule,
   ],
   providers: [IntegranteResolver, IntegranteService],
 })

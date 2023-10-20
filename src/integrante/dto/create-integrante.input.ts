@@ -5,9 +5,9 @@ export class CreateIntegranteInput {
   @Field(() => Int)
   userId: number;
 
+  @Field(() => Int)
+  equipoId: number;
+
   @Field()
   rol: string;
-
-  // @Field(() => Int)
-  // equipoId: number;
 }

@@ -1,8 +1,17 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { IntegranteService } from '../services/integrante.service';
 import { Integrante } from '../entities/integrante.entity';
 import { CreateIntegranteInput } from '../dto/create-integrante.input';
 import { UpdateIntegranteInput } from '../dto/update-integrante.input';
+import { Users } from '../entities/user.entity';
 
 @Resolver(() => Integrante)
 export class IntegranteResolver {
@@ -39,4 +48,9 @@ export class IntegranteResolver {
   // removeIntegrante(@Args('id', { type: () => Int }) id: number) {
   //   return this.integranteService.remove(id);
   // }
+
+  @ResolveField(() => Users)
+  user(@Parent() integrante: Integrante): any {
+    return { __typename: 'Users', id: integrante.userId };
+  }
 }
