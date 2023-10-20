@@ -25,11 +25,11 @@ export class EquipoService {
     return this.equipoRepository.find();
   }
 
-  async findOne(nombre: string) {
+  async findOneByName(nombre: string) {
     const equipo = await this.equipoRepository.findOne({
       where: { nombre },
     });
-    if (!equipo) throw new NotFoundException('Tarea not found');
+    if (!equipo) throw new NotFoundException('Equipo not found');
     return equipo;
   }
 
@@ -41,14 +41,15 @@ export class EquipoService {
     return equipo;
   }
 
-  async update(nombreEquipo: string, updateEquipoDto: UpdateEquipoInput) {
+  async update(updateEquipoDto: UpdateEquipoInput) {
+    const { id } = updateEquipoDto;
     const equipo = await this.equipoRepository.preload({
-      nombre: nombreEquipo,
+      id: id,
       ...updateEquipoDto,
     });
     if (!equipo)
       throw new NotFoundException(
-        `Equipo whit nombre: ${nombreEquipo} not found`,
+        `Error en la actualizacion, intentalo nuevamente`,
       );
     try {
       await this.equipoRepository.save(equipo);
@@ -60,7 +61,10 @@ export class EquipoService {
 
   async remove(id: number) {
     const equipo = await this.findOneById(id);
-    if (!equipo) throw new NotFoundException('Equipo not found');
+    if (!equipo)
+      throw new NotFoundException(
+        'Error al eliminar el equipo, intentalo nuevamente.',
+      );
     this.equipoRepository.remove(equipo);
     return equipo;
   }

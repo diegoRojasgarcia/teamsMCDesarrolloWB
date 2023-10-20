@@ -42,6 +42,24 @@ export class IntegranteService {
   //   return `This action removes a #${id} integrante`;
   // }
 
+  async update(updateIntegrante: UpdateIntegranteInput) {
+    const { id } = updateIntegrante;
+    const integrante = await this.integranteRepository.preload({
+      id: id,
+      ...updateIntegrante,
+    });
+    if (!integrante)
+      throw new NotFoundException(
+        `Error en la actualizacion, intentalo nuevamente`,
+      );
+    try {
+      await this.integranteRepository.save(integrante);
+      return integrante;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async forUserId(userId: number) {
     const integrante = await this.integranteRepository.find();
     if (!integrante) return [];

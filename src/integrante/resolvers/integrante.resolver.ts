@@ -1,9 +1,7 @@
 import {
   Resolver,
-  Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
@@ -34,15 +32,12 @@ export class IntegranteResolver {
   //   return this.integranteService.findOne(id);
   // }
 
-  // @Mutation(() => Integrante)
-  // updateIntegrante(
-  //   @Args('updateIntegranteInput') updateIntegranteInput: UpdateIntegranteInput,
-  // ) {
-  //   return this.integranteService.update(
-  //     updateIntegranteInput.id,
-  //     updateIntegranteInput,
-  //   );
-  // }
+  @Mutation(() => Integrante)
+  updateIntegrante(
+    @Args('updateIntegranteInput') updateIntegranteInput: UpdateIntegranteInput,
+  ) {
+    return this.integranteService.update(updateIntegranteInput);
+  }
 
   // @Mutation(() => Integrante)
   // removeIntegrante(@Args('id', { type: () => Int }) id: number) {

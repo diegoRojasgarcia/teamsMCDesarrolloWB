@@ -5,11 +5,13 @@ import {
   Args,
   ResolveField,
   Parent,
+  Int,
 } from '@nestjs/graphql';
 import { EquipoService } from '../services/equipo.service';
 import { Equipo } from '../entities/equipo.entity';
 import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { Users } from '../entities/user.entity';
+import { UpdateEquipoInput } from '../dto/update-equipo.input';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -27,25 +29,22 @@ export class EquipoResolver {
     return this.equipoService.findAll();
   }
 
-  // @Query(() => [Equipo], { name: 'equipo' })
-  // findAll() {
-  //   return this.equipoService.findAll();
-  // }
+  @Query(() => Equipo, { name: 'equipo' })
+  findOneByNombre(@Args('nombre', { type: () => String }) nombre: string) {
+    return this.equipoService.findOneByName(nombre);
+  }
 
-  // @Query(() => Equipo, { name: 'equipo' })
-  // findOne(@Args('id', { type: () => Int }) id: number) {
-  //   return this.equipoService.findOne(id);
-  // }
+  @Mutation(() => Equipo)
+  updateEquipo(
+    @Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput,
+  ) {
+    return this.equipoService.update(updateEquipoInput);
+  }
 
-  // @Mutation(() => Equipo)
-  // updateEquipo(@Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput) {
-  //   return this.equipoService.update(updateEquipoInput.id, updateEquipoInput);
-  // }
-
-  // @Mutation(() => Equipo)
-  // removeEquipo(@Args('id', { type: () => Int }) id: number) {
-  //   return this.equipoService.remove(id);
-  // }
+  @Mutation(() => Equipo)
+  removeEquipo(@Args('id', { type: () => Int }) id: number) {
+    return this.equipoService.remove(id);
+  }
 
   @ResolveField(() => Users)
   user(@Parent() equipo: Equipo): any {
