@@ -9,6 +9,7 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { UsersResolver } from './resolvers/users.resolver';
+import { ProyectoResolver } from './resolvers/proyecto.resolver';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { UsersResolver } from './resolvers/users.resolver';
     }),
     TypeOrmModule.forFeature([Equipo]),
   ],
-  providers: [EquipoResolver, EquipoService, UsersResolver],
+  providers: [EquipoResolver, EquipoService, UsersResolver, ProyectoResolver],
   exports: [EquipoService],
 })
 export class EquipoModule {}

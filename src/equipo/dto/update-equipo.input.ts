@@ -2,7 +2,7 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateEquipoInput {
-  @Field()
+  @Field(() => Int)
   id: number;
 
   @Field()

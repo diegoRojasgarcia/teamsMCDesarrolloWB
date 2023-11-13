@@ -6,12 +6,14 @@ import {
   ResolveField,
   Parent,
   Int,
+  ResolveReference,
 } from '@nestjs/graphql';
 import { EquipoService } from '../services/equipo.service';
 import { Equipo } from '../entities/equipo.entity';
 import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { Users } from '../entities/user.entity';
 import { UpdateEquipoInput } from '../dto/update-equipo.input';
+import { Proyecto } from '../entities/proyecto.entity';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -34,6 +36,11 @@ export class EquipoResolver {
     return this.equipoService.findOneByName(nombre);
   }
 
+  @Query(() => [Equipo])
+  getEquiposbyProyectId(@Args('id') id: number) {
+    return this.equipoService.findEquiposByIdProyecto(id);
+  }
+
   @Mutation(() => Equipo)
   updateEquipo(
     @Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput,
@@ -49,5 +56,10 @@ export class EquipoResolver {
   @ResolveField(() => Users)
   user(@Parent() equipo: Equipo): any {
     return { __typename: 'Users', id: equipo.idAdmin };
+  }
+
+  @ResolveField(() => Proyecto)
+  proyecto(@Parent() equipo: Equipo): any {
+    return { __typename: 'Proyecto', id: equipo.idProyecto };
   }
 }

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Equipo } from '../entities/equipo.entity';
 import { UpdateEquipoInput } from '../dto/update-equipo.input';
+import { ResolveReference } from '@nestjs/graphql';
 
 @Injectable()
 export class EquipoService {
@@ -31,6 +32,15 @@ export class EquipoService {
     });
     if (!equipo) throw new NotFoundException('Equipo not found');
     return equipo;
+  }
+
+  async findEquiposByIdProyecto(id: number) {
+    const equipos = this.findAll();
+    const equiposbyProyecto = (await equipos).filter(
+      (equipo) => equipo.idProyecto === id,
+    );
+    if (!equiposbyProyecto) return [];
+    return equiposbyProyecto;
   }
 
   async findOneById(id: number) {
@@ -73,5 +83,11 @@ export class EquipoService {
     const equipos = await this.equipoRepository.find();
     if (!equipos) return [];
     return equipos.filter((equipo) => equipo.idAdmin === userId);
+  }
+
+  async forProyectoId(proyectoId: number) {
+    const equipos = await this.equipoRepository.find();
+    if (!equipos) return [];
+    return equipos.filter((equipos) => equipos.idProyecto === proyectoId);
   }
 }

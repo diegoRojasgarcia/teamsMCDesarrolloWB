@@ -19,12 +19,12 @@ export class Integrante {
   user: Users;
 
   @Column()
-  @Field(() => Int)
-  equipoId: number;
-
-  @Column()
   @Field()
   rol: string;
+
+  @Column()
+  @Field(() => Int)
+  equipoId: number;
 
   @ManyToOne(() => Equipo, (equipo) => equipo.integrantes)
   @Field(() => Equipo)

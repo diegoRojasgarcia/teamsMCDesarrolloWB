@@ -3,12 +3,12 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
   OneToMany,
-  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Users } from './user.entity';
 import { Integrante } from 'src/integrante/entities/integrante.entity';
+import { Proyecto } from './proyecto.entity';
 
 @Entity()
 @ObjectType()
@@ -34,4 +34,11 @@ export class Equipo {
   })
   @Field(() => [Integrante])
   integrantes?: Integrante[];
+
+  @Column()
+  @Field(() => Int)
+  idProyecto: number;
+
+  @Field(() => Proyecto)
+  proyecto?: Proyecto;
 }
