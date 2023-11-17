@@ -1,11 +1,5 @@
 import { ObjectType, Field, Int, Directive } from '@nestjs/graphql';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Users } from './user.entity';
 import { Integrante } from 'src/integrante/entities/integrante.entity';
 import { Proyecto } from './proyecto.entity';

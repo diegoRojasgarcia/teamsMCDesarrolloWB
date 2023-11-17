@@ -14,6 +14,7 @@ import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { Users } from '../entities/user.entity';
 import { UpdateEquipoInput } from '../dto/update-equipo.input';
 import { Proyecto } from '../entities/proyecto.entity';
+import { getEquipoInput } from '../dto/getEquipo';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -37,8 +38,15 @@ export class EquipoResolver {
   }
 
   @Query(() => [Equipo])
-  getEquiposbyProyectId(@Args('id') id: number) {
+  getEquiposbyProyectId(@Args('id', { type: () => Int }) id: number) {
     return this.equipoService.findEquiposByIdProyecto(id);
+  }
+
+  @Query(() => [Equipo])
+  getEquiposbyIdProyectoName(
+    @Args('getEquipoInput') getEquipoInput: getEquipoInput,
+  ) {
+    return this.equipoService.findEquipo(getEquipoInput);
   }
 
   @Mutation(() => Equipo)
@@ -61,5 +69,10 @@ export class EquipoResolver {
   @ResolveField(() => Proyecto)
   proyecto(@Parent() equipo: Equipo): any {
     return { __typename: 'Proyecto', id: equipo.idProyecto };
+  }
+
+  @ResolveReference()
+  resolveReference(reference: { __typename: string; id: number }) {
+    return this.equipoService.findOneById(reference.id);
   }
 }

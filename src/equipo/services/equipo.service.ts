@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Equipo } from '../entities/equipo.entity';
 import { UpdateEquipoInput } from '../dto/update-equipo.input';
-import { ResolveReference } from '@nestjs/graphql';
+import { getEquipoInput } from '../dto/getEquipo';
 
 @Injectable()
 export class EquipoService {
@@ -89,5 +89,18 @@ export class EquipoService {
     const equipos = await this.equipoRepository.find();
     if (!equipos) return [];
     return equipos.filter((equipos) => equipos.idProyecto === proyectoId);
+  }
+
+  async findEquipo({ idProyecto, nombre }: getEquipoInput) {
+    const equipos = this.findAll();
+    const equiposByIdProyecto = (await equipos).filter(
+      (equipo) => equipo.idProyecto === idProyecto,
+    );
+    if (!equiposByIdProyecto) return [];
+    const equiposbyName = equiposByIdProyecto.filter(
+      (equipo) => equipo.nombre === nombre,
+    );
+    if (!equiposbyName) return [];
+    return equiposbyName;
   }
 }
