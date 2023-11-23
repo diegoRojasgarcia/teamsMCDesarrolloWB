@@ -46,6 +46,7 @@ export class EquipoService {
   async findOneById(id: number) {
     const equipo = await this.equipoRepository.findOne({
       where: { id },
+      relations: ['integrantes'],
     });
     if (!equipo) throw new NotFoundException('Equipo not found');
     return equipo;
@@ -102,5 +103,11 @@ export class EquipoService {
     );
     if (!equiposbyName) return [];
     return equiposbyName;
+  }
+
+  async findIntegrantesByIdEquipo(idEquipo: number) {
+    const equipo = this.findOneById(idEquipo);
+    const integrantes = (await equipo).integrantes;
+    return integrantes;
   }
 }

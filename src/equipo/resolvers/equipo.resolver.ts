@@ -15,6 +15,7 @@ import { Users } from '../entities/user.entity';
 import { UpdateEquipoInput } from '../dto/update-equipo.input';
 import { Proyecto } from '../entities/proyecto.entity';
 import { getEquipoInput } from '../dto/getEquipo';
+import { Integrante } from 'src/integrante/entities/integrante.entity';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -40,6 +41,11 @@ export class EquipoResolver {
   @Query(() => [Equipo])
   getEquiposbyProyectId(@Args('id', { type: () => Int }) id: number) {
     return this.equipoService.findEquiposByIdProyecto(id);
+  }
+
+  @Query(() => [Integrante])
+  getIntegrantebyIdEquipo(@Args('id', { type: () => Int }) id: number) {
+    return this.equipoService.findIntegrantesByIdEquipo(id);
   }
 
   @Query(() => [Equipo])

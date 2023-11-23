@@ -4,6 +4,8 @@ import {
   Args,
   ResolveField,
   Parent,
+  Query,
+  Int,
 } from '@nestjs/graphql';
 import { IntegranteService } from '../services/integrante.service';
 import { Integrante } from '../entities/integrante.entity';
@@ -20,6 +22,11 @@ export class IntegranteResolver {
     @Args('createIntegranteInput') createIntegranteInput: CreateIntegranteInput,
   ) {
     return this.integranteService.create(createIntegranteInput);
+  }
+
+  @Query(() => [Integrante])
+  getIntegrantesbyIdEquipo(@Args('id', { type: () => Int }) id: number) {
+    return this.integranteService.findIntegrantesByIdEquipo(id);
   }
 
   // @Query(() => [Integrante], { name: 'integrante' })

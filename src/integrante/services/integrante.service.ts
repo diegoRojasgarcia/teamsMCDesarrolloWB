@@ -26,9 +26,17 @@ export class IntegranteService {
     return equipoDB;
   }
 
-  // findAll() {
-  //   return `This action returns all integrante`;
-  // }
+  async findAll(): Promise<Integrante[]> {
+    return this.integranteRepository.find();
+  }
+
+  async findIntegrantesByIdEquipo(idEquipo: number) {
+    const rpintegrantes = this.findAll();
+    const integrantes = (await rpintegrantes).filter(
+      (integrante) => integrante.equipoId === idEquipo,
+    );
+    return integrantes;
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} integrante`;
