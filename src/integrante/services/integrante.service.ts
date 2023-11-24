@@ -22,8 +22,8 @@ export class IntegranteService {
     newIntegrante.userId = userId;
     newIntegrante.rol = rol;
     newIntegrante.equipoId = equipoDB.id;
-    this.integranteRepository.save(newIntegrante);
-    return equipoDB;
+    const createIntegrante = this.integranteRepository.save(newIntegrante);
+    return createIntegrante;
   }
 
   async findAll(): Promise<Integrante[]> {
