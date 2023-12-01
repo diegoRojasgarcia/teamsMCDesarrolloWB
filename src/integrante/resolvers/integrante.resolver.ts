@@ -29,10 +29,15 @@ export class IntegranteResolver {
     return this.integranteService.findIntegrantesByIdEquipo(id);
   }
 
-  // @Query(() => [Integrante], { name: 'integrante' })
-  // findAll() {
-  //   return this.integranteService.findAll();
-  // }
+  @Query(() => [Integrante])
+  getIntegrantebyIdUsuario(@Args('id', { type: () => Int }) id: number) {
+    return this.integranteService.findIntegrantesByIdUsuario(id);
+  }
+
+  @Query(() => [Integrante])
+  findIntegrantes() {
+    return this.integranteService.findAll();
+  }
 
   // @Query(() => Integrante, { name: 'integrante' })
   // findOne(@Args('id', { type: () => Int }) id: number) {

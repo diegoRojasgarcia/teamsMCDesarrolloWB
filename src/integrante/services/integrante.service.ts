@@ -15,13 +15,14 @@ export class IntegranteService {
   ) {}
 
   async create(createIntegranteInput: CreateIntegranteInput) {
-    const { equipoId, userId, rol } = createIntegranteInput;
+    const { equipoId, userId, rol, idProyecto } = createIntegranteInput;
     const equipoDB = await this.equipoService.findOneById(equipoId);
     if (!equipoDB) throw new NotFoundException('Equipo not found');
     const newIntegrante = this.integranteRepository.create();
     newIntegrante.userId = userId;
     newIntegrante.rol = rol;
     newIntegrante.equipoId = equipoDB.id;
+    newIntegrante.idProyecto = idProyecto;
     const createIntegrante = this.integranteRepository.save(newIntegrante);
     return createIntegrante;
   }
@@ -36,6 +37,11 @@ export class IntegranteService {
       (integrante) => integrante.equipoId === idEquipo,
     );
     return integrantes;
+  }
+
+  async findIntegrantesByIdUsuario(idusuario: number) {
+    console.log(idusuario);
+    return this.integranteRepository.find({ where: { userId: idusuario } });
   }
 
   // findOne(id: number) {

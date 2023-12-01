@@ -29,4 +29,8 @@ export class Integrante {
   @ManyToOne(() => Equipo, (equipo) => equipo.integrantes)
   @Field(() => Equipo)
   equipo: Equipo;
+
+  @Column()
+  @Field(() => Int)
+  idProyecto: number;
 }
