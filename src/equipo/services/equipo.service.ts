@@ -3,8 +3,9 @@ import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Equipo } from '../entities/equipo.entity';
-import { UpdateEquipoInput } from '../dto/update-equipo.input';
 import { getEquipoInput } from '../dto/getEquipo';
+import { findEquipoByIdDto } from '../dto/findEquipoById';
+import { updateEquipoDto } from '../dto/update-equipo.input';
 
 @Injectable()
 export class EquipoService {
@@ -52,10 +53,12 @@ export class EquipoService {
     return equipo;
   }
 
-  async update(updateEquipoDto: UpdateEquipoInput) {
-    const { id } = updateEquipoDto;
+  async update(
+    findProyectoByIdDto: findEquipoByIdDto,
+    updateEquipoDto: updateEquipoDto,
+  ) {
     const equipo = await this.equipoRepository.preload({
-      id: id,
+      id: findProyectoByIdDto.id,
       ...updateEquipoDto,
     });
     if (!equipo)
@@ -70,8 +73,8 @@ export class EquipoService {
     }
   }
 
-  async remove(id: number) {
-    const equipo = await this.findOneById(id);
+  async remove(findEquipoByIdDto: findEquipoByIdDto) {
+    const equipo = await this.findOneById(findEquipoByIdDto.id);
     if (!equipo)
       throw new NotFoundException(
         'Error al eliminar el equipo, intentalo nuevamente.',

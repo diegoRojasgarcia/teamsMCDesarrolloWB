@@ -14,7 +14,9 @@ export class IntegranteService {
     private readonly equipoService: EquipoService,
   ) {}
 
-  async create(createIntegranteInput: CreateIntegranteInput) {
+  async create(
+    createIntegranteInput: CreateIntegranteInput,
+  ): Promise<Integrante> {
     const { equipoId, userId, rol, idProyecto } = createIntegranteInput;
     const equipoDB = await this.equipoService.findOneById(equipoId);
     if (!equipoDB) throw new NotFoundException('Equipo not found');
@@ -40,7 +42,6 @@ export class IntegranteService {
   }
 
   async findIntegrantesByIdUsuario(idusuario: number) {
-    console.log(idusuario);
     return this.integranteRepository.find({ where: { userId: idusuario } });
   }
 

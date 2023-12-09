@@ -12,10 +12,11 @@ import { EquipoService } from '../services/equipo.service';
 import { Equipo } from '../entities/equipo.entity';
 import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { Users } from '../entities/user.entity';
-import { UpdateEquipoInput } from '../dto/update-equipo.input';
 import { Proyecto } from '../entities/proyecto.entity';
 import { getEquipoInput } from '../dto/getEquipo';
 import { Integrante } from 'src/integrante/entities/integrante.entity';
+import { findEquipoByIdDto } from '../dto/findEquipoById';
+import { updateEquipoDto } from '../dto/update-equipo.input';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -55,16 +56,31 @@ export class EquipoResolver {
     return this.equipoService.findEquipo(getEquipoInput);
   }
 
-  @Mutation(() => Equipo)
-  updateEquipo(
-    @Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput,
-  ) {
-    return this.equipoService.update(updateEquipoInput);
-  }
+  // @Mutation(() => Equipo)
+  // updateEquipo(
+  //   @Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput,
+  // ) {
+  //   return this.equipoService.update(updateEquipoInput);
+  // }
 
   @Mutation(() => Equipo)
-  removeEquipo(@Args('id', { type: () => Int }) id: number) {
-    return this.equipoService.remove(id);
+  updateEquipo(
+    @Args('findEquipoByIdInput') findEquipoByIdDto: findEquipoByIdDto,
+    @Args('updateEquipoInput') updateEquipoDto: updateEquipoDto,
+  ): Promise<Equipo> {
+    return this.equipoService.update(findEquipoByIdDto, updateEquipoDto);
+  }
+
+  // @Mutation(() => Equipo)
+  // removeEquipo(@Args('id', { type: () => Int }) id: number) {
+  //   return this.equipoService.remove(id);
+  // }
+
+  @Mutation(() => Equipo)
+  removeEquipo(
+    @Args('findEquipoByIdInput') findEquipoByIdDto: findEquipoByIdDto,
+  ): Promise<Equipo> {
+    return this.equipoService.remove(findEquipoByIdDto);
   }
 
   @ResolveField(() => Users)
