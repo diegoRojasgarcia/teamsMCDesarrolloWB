@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEquipoInput } from '../dto/create-equipo.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Equipo } from '../entities/equipo.entity';
 import { getEquipoInput } from '../dto/getEquipo';
 import { findEquipoByIdDto } from '../dto/findEquipoById';
@@ -96,16 +96,22 @@ export class EquipoService {
   }
 
   async findEquipo({ idProyecto, nombre }: getEquipoInput) {
-    const equipos = this.findAll();
-    const equiposByIdProyecto = (await equipos).filter(
-      (equipo) => equipo.idProyecto === idProyecto,
-    );
-    if (!equiposByIdProyecto) return [];
-    const equiposbyName = equiposByIdProyecto.filter(
-      (equipo) => equipo.nombre === nombre,
-    );
-    if (!equiposbyName) return [];
-    return equiposbyName;
+    // const equipos = this.findAll();
+    // const equiposByIdProyecto = (await equipos).filter(
+    //   (equipo) => equipo.idProyecto === idProyecto,
+    // );
+    // if (!equiposByIdProyecto) return [];
+    // const equiposbyName = equiposByIdProyecto.filter(
+    //   (equipo) => equipo.nombre === nombre,
+    // );
+    // if (!equiposbyName) return [];
+    // return equiposbyName;
+    return this.equipoRepository.find({
+      where: {
+        nombre: Like(`%${nombre}%`),
+        idProyecto: idProyecto,
+      },
+    });
   }
 
   async findIntegrantesByIdEquipo(idEquipo: number) {
