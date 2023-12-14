@@ -25,6 +25,7 @@ export class Equipo {
 
   @OneToMany(() => Integrante, (integrante) => integrante.equipo, {
     eager: true,
+    onDelete: 'CASCADE',
   })
   @Field(() => [Integrante])
   integrantes?: Integrante[];

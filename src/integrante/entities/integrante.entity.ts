@@ -26,7 +26,9 @@ export class Integrante {
   @Field(() => Int)
   equipoId: number;
 
-  @ManyToOne(() => Equipo, (equipo) => equipo.integrantes)
+  @ManyToOne(() => Equipo, (equipo) => equipo.integrantes, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Equipo)
   equipo: Equipo;
 
