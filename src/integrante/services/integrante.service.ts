@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Integrante } from '../entities/integrante.entity';
 import { Repository } from 'typeorm';
 import { EquipoService } from 'src/equipo/services/equipo.service';
+import { findIntegranteDto } from '../dto/find-integrante.dto';
 
 @Injectable()
 export class IntegranteService {
@@ -45,17 +46,32 @@ export class IntegranteService {
     return this.integranteRepository.find({ where: { userId: idusuario } });
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} integrante`;
-  // }
+  async findOneById(findIntegranteByIdDto) {
+    const { id } = findIntegranteByIdDto;
+    const IntegranteDB = await this.integranteRepository.findOne({
+      where: { id },
+    });
+    if (!IntegranteDB) throw new NotFoundException('Integrante not found');
+    return IntegranteDB;
+  }
 
   // update(id: number, updateIntegranteInput: UpdateIntegranteInput) {
   //   return `This action updates a #${id} integrante`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} integrante`;
-  // }
+  async remove(findIntegranteByIdDto: findIntegranteDto) {
+    const integranteDB = await this.findOneById(findIntegranteByIdDto);
+    if (!integranteDB)
+      throw new NotFoundException(
+        'Error al eliminar la tarea, intentalo nuevamente.',
+      );
+    try {
+      this.integranteRepository.remove(integranteDB);
+      return integranteDB;
+    } catch (error) {
+      return error;
+    }
+  }
 
   async update(updateIntegrante: UpdateIntegranteInput) {
     const { id } = updateIntegrante;

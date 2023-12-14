@@ -12,6 +12,7 @@ import { Integrante } from '../entities/integrante.entity';
 import { CreateIntegranteInput } from '../dto/create-integrante.input';
 import { UpdateIntegranteInput } from '../dto/update-integrante.input';
 import { Users } from '../entities/user.entity';
+import { findIntegranteDto } from '../dto/find-integrante.dto';
 
 @Resolver(() => Integrante)
 export class IntegranteResolver {
@@ -51,10 +52,12 @@ export class IntegranteResolver {
     return this.integranteService.update(updateIntegranteInput);
   }
 
-  // @Mutation(() => Integrante)
-  // removeIntegrante(@Args('id', { type: () => Int }) id: number) {
-  //   return this.integranteService.remove(id);
-  // }
+  @Mutation(() => Integrante)
+  removeIntegrante(
+    @Args('findIntegranteDto') findIntegranteByIdDto: findIntegranteDto,
+  ): Promise<Integrante> {
+    return this.integranteService.remove(findIntegranteByIdDto);
+  }
 
   @ResolveField(() => Users)
   user(@Parent() integrante: Integrante): any {
