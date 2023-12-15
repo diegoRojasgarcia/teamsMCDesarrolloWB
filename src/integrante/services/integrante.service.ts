@@ -34,7 +34,7 @@ export class IntegranteService {
     return this.integranteRepository.find();
   }
 
-  async findIntegrantesByIdEquipo(idEquipo: number) {
+  async findIntegrantesByIdEquipo(idEquipo: number): Promise<Integrante[]> {
     const rpintegrantes = this.findAll();
     const integrantes = (await rpintegrantes).filter(
       (integrante) => integrante.equipoId === idEquipo,
@@ -42,11 +42,11 @@ export class IntegranteService {
     return integrantes;
   }
 
-  async findIntegrantesByIdUsuario(idusuario: number) {
+  async findIntegrantesByIdUsuario(idusuario: number): Promise<Integrante[]> {
     return this.integranteRepository.find({ where: { userId: idusuario } });
   }
 
-  async findOneById(findIntegranteByIdDto) {
+  async findOneById(findIntegranteByIdDto): Promise<Integrante> {
     const { id } = findIntegranteByIdDto;
     const IntegranteDB = await this.integranteRepository.findOne({
       where: { id },
@@ -55,11 +55,7 @@ export class IntegranteService {
     return IntegranteDB;
   }
 
-  // update(id: number, updateIntegranteInput: UpdateIntegranteInput) {
-  //   return `This action updates a #${id} integrante`;
-  // }
-
-  async remove(findIntegranteByIdDto: findIntegranteDto) {
+  async remove(findIntegranteByIdDto: findIntegranteDto): Promise<Integrante> {
     const integranteDB = await this.findOneById(findIntegranteByIdDto);
     if (!integranteDB)
       throw new NotFoundException(
@@ -73,7 +69,7 @@ export class IntegranteService {
     }
   }
 
-  async update(updateIntegrante: UpdateIntegranteInput) {
+  async update(updateIntegrante: UpdateIntegranteInput): Promise<Integrante> {
     const { id } = updateIntegrante;
     const integrante = await this.integranteRepository.preload({
       id: id,

@@ -17,6 +17,7 @@ import { getEquipoInput } from '../dto/getEquipo';
 import { Integrante } from 'src/integrante/entities/integrante.entity';
 import { findEquipoByIdDto } from '../dto/findEquipoById';
 import { updateEquipoDto } from '../dto/update-equipo.input';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => Equipo)
 export class EquipoResolver {
@@ -25,50 +26,77 @@ export class EquipoResolver {
   @Mutation(() => Equipo)
   createEquipo(
     @Args('createEquipoInput') createEquipoInput: CreateEquipoInput,
-  ) {
-    return this.equipoService.createEquipo(createEquipoInput);
+  ): Promise<Equipo> {
+    try {
+      return this.equipoService.createEquipo(createEquipoInput);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Query(() => [Equipo])
-  getEquipos() {
-    return this.equipoService.findAll();
+  getEquipos(): Promise<Equipo[]> {
+    try {
+      return this.equipoService.findAll();
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Query(() => Equipo, { name: 'equipo' })
-  findOneByNombre(@Args('nombre', { type: () => String }) nombre: string) {
-    return this.equipoService.findOneByName(nombre);
+  findOneByNombre(
+    @Args('nombre', { type: () => String }) nombre: string,
+  ): Promise<Equipo> {
+    try {
+      return this.equipoService.findOneByName(nombre);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Query(() => [Equipo])
-  getEquiposbyProyectId(@Args('id', { type: () => Int }) id: number) {
-    return this.equipoService.findEquiposByIdProyecto(id);
+  getEquiposbyProyectId(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<Equipo[]> {
+    try {
+      return this.equipoService.findEquiposByIdProyecto(id);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Query(() => [Integrante])
-  getIntegrantebyIdEquipo(@Args('id', { type: () => Int }) id: number) {
-    return this.equipoService.findIntegrantesByIdEquipo(id);
+  getIntegrantebyIdEquipo(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<Integrante[]> {
+    try {
+      return this.equipoService.findIntegrantesByIdEquipo(id);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Query(() => [Equipo])
   getEquiposbyIdProyectoName(
     @Args('getEquipoInput') getEquipoInput: getEquipoInput,
-  ) {
-    return this.equipoService.findEquipo(getEquipoInput);
+  ): Promise<Equipo[]> {
+    try {
+      return this.equipoService.findEquipo(getEquipoInput);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
-
-  // @Mutation(() => Equipo)
-  // updateEquipo(
-  //   @Args('updateEquipoInput') updateEquipoInput: UpdateEquipoInput,
-  // ) {
-  //   return this.equipoService.update(updateEquipoInput);
-  // }
 
   @Mutation(() => Equipo)
   updateEquipo(
     @Args('findEquipoByIdInput') findEquipoByIdDto: findEquipoByIdDto,
     @Args('updateEquipoInput') updateEquipoDto: updateEquipoDto,
   ): Promise<Equipo> {
-    return this.equipoService.update(findEquipoByIdDto, updateEquipoDto);
+    try {
+      return this.equipoService.update(findEquipoByIdDto, updateEquipoDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   // @Mutation(() => Equipo)
@@ -80,7 +108,11 @@ export class EquipoResolver {
   removeEquipo(
     @Args('findEquipoByIdInput') findEquipoByIdDto: findEquipoByIdDto,
   ): Promise<Equipo> {
-    return this.equipoService.remove(findEquipoByIdDto);
+    try {
+      return this.equipoService.remove(findEquipoByIdDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @ResolveField(() => Users)
