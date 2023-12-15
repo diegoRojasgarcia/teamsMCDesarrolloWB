@@ -6,6 +6,7 @@ import { Equipo } from '../entities/equipo.entity';
 import { getEquipoInput } from '../dto/getEquipo';
 import { findEquipoByIdDto } from '../dto/findEquipoById';
 import { updateEquipoDto } from '../dto/update-equipo.input';
+import { Integrante } from 'src/integrante/entities/integrante.entity';
 
 @Injectable()
 export class EquipoService {
@@ -27,7 +28,7 @@ export class EquipoService {
     return this.equipoRepository.find();
   }
 
-  async findOneByName(nombre: string) {
+  async findOneByName(nombre: string): Promise<Equipo> {
     const equipo = await this.equipoRepository.findOne({
       where: { nombre },
     });
@@ -35,7 +36,7 @@ export class EquipoService {
     return equipo;
   }
 
-  async findEquiposByIdProyecto(id: number) {
+  async findEquiposByIdProyecto(id: number): Promise<Equipo[]> {
     const equipos = this.findAll();
     const equiposbyProyecto = (await equipos).filter(
       (equipo) => equipo.idProyecto === id,
@@ -44,7 +45,7 @@ export class EquipoService {
     return equiposbyProyecto;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<Equipo> {
     const equipo = await this.equipoRepository.findOne({
       where: { id },
       relations: ['integrantes'],
@@ -56,7 +57,7 @@ export class EquipoService {
   async update(
     findProyectoByIdDto: findEquipoByIdDto,
     updateEquipoDto: updateEquipoDto,
-  ) {
+  ): Promise<Equipo> {
     const equipo = await this.equipoRepository.preload({
       id: findProyectoByIdDto.id,
       ...updateEquipoDto,
@@ -73,7 +74,7 @@ export class EquipoService {
     }
   }
 
-  async remove(findEquipoByIdDto: findEquipoByIdDto) {
+  async remove(findEquipoByIdDto: findEquipoByIdDto): Promise<Equipo> {
     const equipo = await this.findOneById(findEquipoByIdDto.id);
     if (!equipo)
       throw new NotFoundException(
@@ -95,17 +96,7 @@ export class EquipoService {
     return equipos.filter((equipos) => equipos.idProyecto === proyectoId);
   }
 
-  async findEquipo({ idProyecto, nombre }: getEquipoInput) {
-    // const equipos = this.findAll();
-    // const equiposByIdProyecto = (await equipos).filter(
-    //   (equipo) => equipo.idProyecto === idProyecto,
-    // );
-    // if (!equiposByIdProyecto) return [];
-    // const equiposbyName = equiposByIdProyecto.filter(
-    //   (equipo) => equipo.nombre === nombre,
-    // );
-    // if (!equiposbyName) return [];
-    // return equiposbyName;
+  async findEquipo({ idProyecto, nombre }: getEquipoInput): Promise<Equipo[]> {
     return this.equipoRepository.find({
       where: {
         nombre: Like(`%${nombre}%`),
@@ -114,7 +105,7 @@ export class EquipoService {
     });
   }
 
-  async findIntegrantesByIdEquipo(idEquipo: number) {
+  async findIntegrantesByIdEquipo(idEquipo: number): Promise<Integrante[]> {
     const equipo = this.findOneById(idEquipo);
     const integrantes = (await equipo).integrantes;
     return integrantes;

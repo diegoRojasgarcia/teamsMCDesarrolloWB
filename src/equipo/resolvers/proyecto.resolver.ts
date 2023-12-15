@@ -8,7 +8,7 @@ export class ProyectoResolver {
   constructor(private readonly equipoService: EquipoService) {}
 
   @ResolveField(() => [Equipo])
-  equipos(@Parent() proyecto: Proyecto) {
+  equipos(@Parent() proyecto: Proyecto): Promise<Equipo[]> {
     return this.equipoService.forProyectoId(proyecto.id);
   }
 }
